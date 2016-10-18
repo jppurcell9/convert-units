@@ -163,26 +163,28 @@ Supported Units
  * gal
  * ft3
  * yd3
- 
+
 ### Temperature
- 
+
  * C
  * F
  * K
- 
+
 ### Time
-  
+
   * ms
   * s
   * min
   * h
   * d
+  * M (30.4375 d)
+  * y (365.25 d)
   * week
-  * month
-  * year
-  
+  * month (1/12 year)
+  * year (52 weeks)
+
 ### Volume
-  
+
   * mm3
   * cm3
   * ml

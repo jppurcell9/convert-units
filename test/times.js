@@ -9,7 +9,7 @@ tests['s to ms'] = function () {
   assert.strictEqual( convert(1).from('s').to('ms') , 1000);
 };
 
-tests['s to m'] = function () {
+tests['s to min'] = function () {
   assert.strictEqual( convert(60).from('s').to('min'), 1);
 }
 
@@ -26,34 +26,94 @@ tests['s to d'] = function () {
 };
 
 tests['d to week'] = function () {
-  assert.strictEqual( convert(7).from('d').to('week'), 1);
+  var expected = 1
+    , actual = convert(7).from('d').to('week');
+  assert.ok( percentError(expected, actual) < ACCURACY
+    , 'Expected: ' + expected +', Actual: ' + actual);
 };
 
-// Incorrect, shoud be either 30.4167 or 30.4375 days in a month
+// Seasonal conversion: 1 month = 30.333 days
 tests ['d to month'] = function () {
-  assert.strictEqual( convert(28).from('d').to('month'), 1);
+  var expected = 1
+    , actual = convert(30.333).from('d').to('month');
+  assert.ok( percentError(expected, actual) < ACCURACY
+    , 'Expected: ' + expected +', Actual: ' + actual);
 };
 
-// Incorrect, should be 365 or 365.25 days in 1 year
+// Seasonal conversion: 1 year = 364 days
 tests ['d to year'] = function () {
-  assert.strictEqual( convert(364).from('d').to('year'), 1);
+  var expected = 1
+    , actual = convert(364).from('d').to('year');
+  assert.ok( percentError(expected, actual) < ACCURACY
+    , 'Expected: ' + expected +', Actual: ' + actual);
 };
 
-// Incorrect, should be 4.34524 or 4.34821 weeks in 1 month
+// Seasonal conversion: 1 month = 4.333 weeks
 tests['week to month'] = function () {
-  assert.strictEqual( convert(4).from('week').to('month'), 1);
+  var expected = 1
+    , actual = convert(4.333).from('week').to('month');
+  assert.ok( percentError(expected, actual) < ACCURACY
+    , 'Expected: ' + expected +', Actual: ' + actual);
 };
 
+// Seasonal conversion: 1 year = 52 weeks
 tests['week to year'] = function () {
   assert.strictEqual( convert(52).from('week').to('year'), 1);
 };
 
-// Incorrect, should be 12 months in 1 year
+// Seasonal conversion: 1 year = 12 months
 tests['month to year'] = function () {
-  var expected = .923
-    , actual = convert(12).from('month').to('year');
+  assert.strictEqual(convert(12).from('month').to('year'), 1);
+};
+
+// SI conversion: 1 month = 30.4375 days
+tests['d to M'] = function () {
+  var expected = 1
+    , actual = convert(30.4375).from('d').to('M');
   assert.ok( percentError(expected, actual) < ACCURACY
     , 'Expected: ' + expected +', Actual: ' + actual);
 };
+
+// SI conversion: 1 year = 365.25 days
+tests['d to y'] = function () {
+  assert.strictEqual(convert(365.25).from('d').to('y'), 1);
+};
+
+// SI conversion: 1 year = 12 months
+tests['M to y'] = function () {
+  assert.strictEqual(convert(12).from('M').to('y'), 1);
+};
+
+// Seasonal week => SI month
+tests['week to M'] = function() {
+  var expected = 1
+    , actual = convert(4.34821).from('week').to('M');
+  assert.ok( percentError(expected, actual) < ACCURACY
+    , 'Expected: ' + expected +', Actual: ' + actual);
+}
+
+// Seasonal week => SI y
+tests['week to y'] = function() {
+  var expected = 1
+    , actual = convert(52.17857).from('week').to('y');
+  assert.ok( percentError(expected, actual) < ACCURACY
+    , 'Expected: ' + expected +', Actual: ' + actual);
+}
+
+//SI M => Seasonal year
+tests['M to year'] = function() {
+  var expected = 1
+    , actual = convert(11.95853).from('M').to('year');
+  assert.ok( percentError(expected, actual) < ACCURACY
+    , 'Expected: ' + expected +', Actual: ' + actual);
+}
+
+//Seasonal month => SI y
+tests['month to y'] = function() {
+  var expected = 1
+    , actual = convert(12.04121).from('month').to('y');
+  assert.ok( percentError(expected, actual) < ACCURACY
+    , 'Expected: ' + expected +', Actual: ' + actual);
+}
 
 module.exports = tests;
